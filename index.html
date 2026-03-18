@@ -309,24 +309,7 @@
       opacity: 0.6;
     }
 
-    /* ─── LIVE INDICATOR ─────────────────────── */
-    .live-dot {
-      display: inline-block;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--gold);
-      margin-right: 6px;
-      animation: pulse 2s infinite;
-      vertical-align: middle;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    /* ─── MOBILE ─────────────────────────────── */
+/* ─── MOBILE ─────────────────────────────── */
     @media (max-width: 768px) {
       header { padding: 0 20px; grid-template-columns: 1fr auto; }
       .nav-left { display: none; }
@@ -363,7 +346,6 @@
   <div class="toolbar">
     <span class="toolbar-title">Gallery</span>
     <span class="photo-count">
-      <span class="live-dot"></span>
       <span id="count">0 photos</span>
     </span>
   </div>
@@ -497,10 +479,10 @@
 
     // ── Fetch & render ─────────────────────────────────────────────
     function refresh() {
-      fetch('/api/images')
+      fetch('images.json')
         .then(r => r.json())
-        .then(srcs => buildGrid(srcs))
-        .catch(() => {});
+        .then(filenames => buildGrid(filenames.map(f => `images/${f}`)))
+        .catch(() => buildGrid([]));
     }
 
     // ── Lightbox ───────────────────────────────────────────────────
@@ -545,13 +527,6 @@
       if (e.key === 'ArrowRight') { currentIndex = (currentIndex + 1) % allImages.length; showLightboxImage(); }
     });
 
-    // ── Live updates via SSE ───────────────────────────────────────
-    function connectSSE() {
-      const es = new EventSource('/api/watch');
-      es.onmessage = e => { if (e.data === 'refresh') refresh(); };
-      es.onerror   = () => { es.close(); setTimeout(connectSSE, 3000); };
-    }
-
     // ── Rebuild grid on resize ─────────────────────────────────────
     let resizeTimer;
     window.addEventListener('resize', () => {
@@ -561,7 +536,6 @@
 
     // ── Init ───────────────────────────────────────────────────────
     refresh();
-    connectSSE();
   </script>
 </body>
 </html>
