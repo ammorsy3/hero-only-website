@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <radialGradient id="a" cx="30%" cy="40%" r="70%">
+      <stop offset="0%"   stop-color="#3b2f1e"/>
+      <stop offset="100%" stop-color="#0a0906"/>
+    </radialGradient>
+    <radialGradient id="b" cx="80%" cy="20%" r="50%">
+      <stop offset="0%"   stop-color="#2a1f0e" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#0a0906" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="c" cx="50%" cy="100%" r="60%">
+      <stop offset="0%"   stop-color="#0e0d0b"/>
+      <stop offset="100%" stop-color="#0a0906" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur1">
+      <feGaussianBlur stdDeviation="60"/>
+    </filter>
+    <filter id="blur2">
+      <feGaussianBlur stdDeviation="90"/>
+    </filter>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feBlend in="SourceGraphic" mode="multiply" result="blend"/>
+      <feComposite in="blend" in2="SourceGraphic" operator="in"/>
+    </filter>
+  </defs>
+
+  <!-- Base dark background -->
+  <rect width="1920" height="1080" fill="#0c0b09"/>
+
+  <!-- Main warm radial -->
+  <rect width="1920" height="1080" fill="url(#a)"/>
+
+  <!-- Top-right accent glow -->
+  <ellipse cx="1500" cy="180" rx="700" ry="400" fill="#1e1508" filter="url(#blur1)" opacity="0.9"/>
+
+  <!-- Left warm bloom -->
+  <ellipse cx="260" cy="520" rx="500" ry="380" fill="#2c1f0c" filter="url(#blur2)" opacity="0.7"/>
+
+  <!-- Center-bottom dark vignette -->
+  <rect width="1920" height="1080" fill="url(#c)"/>
+
+  <!-- Subtle gold horizontal line accent -->
+  <line x1="0" y1="540" x2="1920" y2="540" stroke="#b8935a" stroke-width="0.4" opacity="0.12"/>
+
+  <!-- Faint vertical rule (left third) -->
+  <line x1="640" y1="0" x2="640" y2="1080" stroke="#b8935a" stroke-width="0.3" opacity="0.07"/>
+
+  <!-- Faint vertical rule (right third) -->
+  <line x1="1280" y1="0" x2="1280" y2="1080" stroke="#b8935a" stroke-width="0.3" opacity="0.07"/>
+
+  <!-- Top-edge vignette -->
+  <rect width="1920" height="300" fill="url(#b)" opacity="0.6"/>
+
+  <!-- Overall noise texture layer -->
+  <rect width="1920" height="1080" fill="#7a6040" opacity="0.03" filter="url(#noise)"/>
+</svg>
