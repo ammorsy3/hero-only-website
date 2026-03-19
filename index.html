@@ -478,10 +478,18 @@
     }
 
     // ── Fetch & render ─────────────────────────────────────────────
+    const GITHUB_API = 'https://api.github.com/repos/ammorsy3/hero-only-website/contents/images';
+
     function refresh() {
-      fetch('images.json')
+      fetch(GITHUB_API)
         .then(r => r.json())
-        .then(filenames => buildGrid(filenames.map(f => `images/${f}`)))
+        .then(files => {
+          if (!Array.isArray(files)) return buildGrid([]);
+          const srcs = files
+            .filter(f => /\.(png|jpe?g|webp|gif|avif)$/i.test(f.name))
+            .map(f => f.download_url);
+          buildGrid(srcs);
+        })
         .catch(() => buildGrid([]));
     }
 
